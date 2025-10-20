@@ -28,7 +28,6 @@ func Connect_Database() {
 			logger.Error("Failed to connect to database: ", zap.Error(err))
 		}
 		if err = pool.Ping(); err != nil {
-			/// todo: zap loger
 			logger.Error("Database failed to response: ", zap.Error(err))
 		}
 		queries = db.New(pool)
