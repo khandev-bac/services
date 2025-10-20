@@ -85,6 +85,81 @@ func (q *Queries) EditUser(ctx context.Context, arg EditUserParams) error {
 	return err
 }
 
+const findByEmail = `-- name: FindByEmail :one
+SELECT id,email,username,picture
+FROM users
+WHERE email = $1
+`
+
+type FindByEmailRow struct {
+	ID       uuid.UUID
+	Email    string
+	Username sql.NullString
+	Picture  sql.NullString
+}
+
+func (q *Queries) FindByEmail(ctx context.Context, email string) (FindByEmailRow, error) {
+	row := q.db.QueryRowContext(ctx, findByEmail, email)
+	var i FindByEmailRow
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Username,
+		&i.Picture,
+	)
+	return i, err
+}
+
+const findById = `-- name: FindById :one
+SELECT id,email,username,picture
+FROM users
+WHERE id = $1
+`
+
+type FindByIdRow struct {
+	ID       uuid.UUID
+	Email    string
+	Username sql.NullString
+	Picture  sql.NullString
+}
+
+func (q *Queries) FindById(ctx context.Context, id uuid.UUID) (FindByIdRow, error) {
+	row := q.db.QueryRowContext(ctx, findById, id)
+	var i FindByIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Username,
+		&i.Picture,
+	)
+	return i, err
+}
+
+const findByUserName = `-- name: FindByUserName :one
+SELECT id,email,username,picture
+FROM users
+WHERE username = $1
+`
+
+type FindByUserNameRow struct {
+	ID       uuid.UUID
+	Email    string
+	Username sql.NullString
+	Picture  sql.NullString
+}
+
+func (q *Queries) FindByUserName(ctx context.Context, username sql.NullString) (FindByUserNameRow, error) {
+	row := q.db.QueryRowContext(ctx, findByUserName, username)
+	var i FindByUserNameRow
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Username,
+		&i.Picture,
+	)
+	return i, err
+}
+
 const googlelogin = `-- name: Googlelogin :one
 INSERT INTO users(username,email,picture,google_id,login_option)
 VALUES ($1,$2,$3,$4,'google')
@@ -122,6 +197,19 @@ func (q *Queries) Googlelogin(ctx context.Context, arg GoogleloginParams) (Googl
 	return i, err
 }
 
+const seeRevoke = `-- name: SeeRevoke :one
+SELECT revoked 
+FROM users
+WHERE id = $1
+`
+
+func (q *Queries) SeeRevoke(ctx context.Context, id uuid.UUID) (sql.NullBool, error) {
+	row := q.db.QueryRowContext(ctx, seeRevoke, id)
+	var revoked sql.NullBool
+	err := row.Scan(&revoked)
+	return revoked, err
+}
+
 const singup = `-- name: Singup :one
 INSERT INTO users(username,email,password)
 VALUES ($1,$2,$3)
@@ -151,92 +239,4 @@ func (q *Queries) Singup(ctx context.Context, arg SingupParams) (SingupRow, erro
 		&i.Picture,
 	)
 	return i, err
-}
-
-const findByEmail = `-- name: findByEmail :one
-SELECT id,email,username,picture
-FROM users
-WHERE email = $1
-`
-
-type findByEmailRow struct {
-	ID       uuid.UUID
-	Email    string
-	Username sql.NullString
-	Picture  sql.NullString
-}
-
-func (q *Queries) findByEmail(ctx context.Context, email string) (findByEmailRow, error) {
-	row := q.db.QueryRowContext(ctx, findByEmail, email)
-	var i findByEmailRow
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.Username,
-		&i.Picture,
-	)
-	return i, err
-}
-
-const findById = `-- name: findById :one
-SELECT id,email,username,picture
-FROM users
-WHERE id = $1
-`
-
-type findByIdRow struct {
-	ID       uuid.UUID
-	Email    string
-	Username sql.NullString
-	Picture  sql.NullString
-}
-
-func (q *Queries) findById(ctx context.Context, id uuid.UUID) (findByIdRow, error) {
-	row := q.db.QueryRowContext(ctx, findById, id)
-	var i findByIdRow
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.Username,
-		&i.Picture,
-	)
-	return i, err
-}
-
-const findByUserName = `-- name: findByUserName :one
-SELECT id,email,username,picture
-FROM users
-WHERE username = $1
-`
-
-type findByUserNameRow struct {
-	ID       uuid.UUID
-	Email    string
-	Username sql.NullString
-	Picture  sql.NullString
-}
-
-func (q *Queries) findByUserName(ctx context.Context, username sql.NullString) (findByUserNameRow, error) {
-	row := q.db.QueryRowContext(ctx, findByUserName, username)
-	var i findByUserNameRow
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.Username,
-		&i.Picture,
-	)
-	return i, err
-}
-
-const seeRevoke = `-- name: seeRevoke :one
-SELECT revoked 
-FROM users
-WHERE id = $1
-`
-
-func (q *Queries) seeRevoke(ctx context.Context, id uuid.UUID) (sql.NullBool, error) {
-	row := q.db.QueryRowContext(ctx, seeRevoke, id)
-	var revoked sql.NullBool
-	err := row.Scan(&revoked)
-	return revoked, err
 }

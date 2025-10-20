@@ -26,22 +26,22 @@ SET
 WHERE id = $2;
 
 
--- name: findById :one
+-- name: FindById :one
 SELECT id,email,username,picture
 FROM users
 WHERE id = $1;
 
--- name: findByEmail :one
+-- name: FindByEmail :one
 SELECT id,email,username,picture
 FROM users
 WHERE email = $1;
 
--- name: findByUserName :one
+-- name: FindByUserName :one
 SELECT id,email,username,picture
 FROM users
 WHERE username = $1;
 
--- name: seeRevoke :one
+-- name: SeeRevoke :one
 SELECT revoked 
 FROM users
 WHERE id = $1;
