@@ -35,5 +35,5 @@ type UserBody struct {
 }
 type LoginBody struct {
 	Email    string `json:"email"`
-	Password string `json:"email"`
+	Password string `json:"password"`
 }
