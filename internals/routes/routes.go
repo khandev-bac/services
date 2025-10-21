@@ -16,6 +16,7 @@ func AuthRoutes(authHandler *handler.AuthController) http.Handler {
 				auth.Get("/", authHandler.Test)
 				auth.Post("/sign-up", authHandler.SignupHandler)
 				auth.Post("/sign-in", authHandler.Login)
+				auth.Post("/refresh", authHandler.Refreshes)
 				auth.With(middleware.AuthMiddleware).Get("/delete-user", authHandler.DeleteUserAccount)
 				auth.With(middleware.AuthMiddleware).Get("/seerevoke", authHandler.SeeRevoke)
 			})

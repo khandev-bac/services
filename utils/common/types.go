@@ -37,3 +37,6 @@ type LoginBody struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+type Refreshes struct {
+	RefreshToken string
+}

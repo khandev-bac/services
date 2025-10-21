@@ -18,3 +18,7 @@ size:
 
 run:
 	go run cmd/main.go
+
+clear:
+	rm -rf ${build_dir}
+
