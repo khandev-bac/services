@@ -4,12 +4,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 	"github.com/services/db"
 	"github.com/services/handler"
-	"github.com/services/internals/middleware"
 	"github.com/services/internals/repository"
+	"github.com/services/internals/routes"
 	"github.com/services/internals/service"
 	"github.com/services/utils/config"
 	"github.com/services/utils/constants"
@@ -26,14 +25,8 @@ func main() {
 	repo := repository.NewRepository(db)
 	service := service.NewAuthService(repo)
 	handler := handler.NewAuthHandler(service)
-	r := chi.NewRouter()
-
-	r.Get("/", handler.Test)
-	r.Post("/sign-in", handler.SignupHandler)
-	r.Post("/login", handler.Login)
-	r.Get("/delete-user", handler.DeleteUserAccount)
-	r.With(middleware.AuthMiddleware).Get("/seerevoke", handler.SeeRevoke)
+	route := routes.AuthRoutes(handler)
 	log.Info("Server is connected to port :3000")
 	defer log.Sync()
-	http.ListenAndServe(constants.PORT, r)
+	http.ListenAndServe(constants.PORT, route)
 }
