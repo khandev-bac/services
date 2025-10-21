@@ -14,7 +14,7 @@ func (as *AuthService) Login(ctx context.Context, email, password string) (*comm
 		return nil, errors.New("user not found")
 	}
 	if err != nil {
-		return nil, err
+		return nil, errors.New("user not found")
 	}
 	if err := common.CheckPasswordHash(password, userFound.Password); err != nil {
 		return nil, errors.New("invalid password or email")

@@ -28,6 +28,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Get("/", handler.Test)
 	r.Post("/sign-in", handler.SignupHandler)
+	r.Post("/login", handler.Login)
 	log.Info("Server is connected to port :3000")
 	defer log.Sync()
 	http.ListenAndServe(constants.PORT, r)
