@@ -33,3 +33,7 @@ type UserBody struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+type LoginBody struct {
+	Email    string `json:"email"`
+	Password string `json:"email"`
+}

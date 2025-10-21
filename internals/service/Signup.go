@@ -47,7 +47,7 @@ func (as *AuthService) SignUp(ctx context.Context, username, email, password str
 	tokens := common.GenerateToken(common.Payloads{
 		Id:       newUser.ID,
 		Email:    newUser.Email,
-		Username: newUser.Email,
+		Username: newUser.Username.String,
 	})
 
 	return &common.UserResponse{

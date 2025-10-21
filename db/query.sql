@@ -58,3 +58,7 @@ DELETE FROM users
 WHERE id = $1;
 
 
+-- name: FindFullWithEmail :one
+SELECT *
+FROM users
+WHERE email = $1;

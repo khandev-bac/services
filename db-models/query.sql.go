@@ -160,6 +160,34 @@ func (q *Queries) FindByUserName(ctx context.Context, username sql.NullString) (
 	return i, err
 }
 
+const findFullWithEmail = `-- name: FindFullWithEmail :one
+SELECT id, username, email, password, useragent, picture, phone_number, bio, role, google_id, login_option, revoked, created_at, updated_at
+FROM users
+WHERE email = $1
+`
+
+func (q *Queries) FindFullWithEmail(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, findFullWithEmail, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Email,
+		&i.Password,
+		&i.Useragent,
+		&i.Picture,
+		&i.PhoneNumber,
+		&i.Bio,
+		&i.Role,
+		&i.GoogleID,
+		&i.LoginOption,
+		&i.Revoked,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const googlelogin = `-- name: Googlelogin :one
 INSERT INTO users(username,email,picture,google_id,login_option)
 VALUES ($1,$2,$3,$4,'google')

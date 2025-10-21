@@ -61,3 +61,6 @@ func (dr *DBQueries) FindByUserName(ctx context.Context, username string) (db.Fi
 func (dr *DBQueries) SeeRevoke(ctx context.Context, id uuid.UUID) (sql.NullBool, error) {
 	return dr.db.SeeRevoke(ctx, id)
 }
+func (dr *DBQueries) FindFullWithEmail(ctx context.Context, email string) (db.User, error) {
+	return dr.db.FindFullWithEmail(ctx, email)
+}
