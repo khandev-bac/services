@@ -29,6 +29,8 @@ func main() {
 	r.Get("/", handler.Test)
 	r.Post("/sign-in", handler.SignupHandler)
 	r.Post("/login", handler.Login)
+	r.Get("/delete-user", handler.DeleteUserAccount)
+	r.Get("/seerevoke", handler.SeeRevoke)
 	log.Info("Server is connected to port :3000")
 	defer log.Sync()
 	http.ListenAndServe(constants.PORT, r)
