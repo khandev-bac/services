@@ -6,6 +6,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/services/db"
+	eventproducer "github.com/services/eventProducer"
 	"github.com/services/handler"
 	"github.com/services/internals/repository"
 	"github.com/services/internals/routes"
@@ -19,14 +20,19 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	log := config.NewLogger(false)
+	logger := config.NewLogger(false)
 	db.Connect_Database()
 	db := db.GetQuery()
+	kafkaProducer, err := eventproducer.NewKafkaProducer("localhost:9092", "user-events")
+	if err != nil {
+		log.Println("Kafka-Event error: ", err)
+	}
+	defer kafkaProducer.Close()
 	repo := repository.NewRepository(db)
 	service := service.NewAuthService(repo)
-	handler := handler.NewAuthHandler(service)
+	handler := handler.NewAuthHandler(service, kafkaProducer)
 	route := routes.AuthRoutes(handler)
-	log.Info("Server is connected to port :3000")
-	defer log.Sync()
+	logger.Info("Server is connected to port :3000")
+	defer logger.Sync()
 	http.ListenAndServe(constants.PORT, route)
 }

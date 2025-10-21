@@ -15,6 +15,8 @@ type Payloads struct {
 type UserResponse struct {
 	ID           uuid.UUID `json:"id"`
 	Email        string    `json:"email"`
+	Username     string    `json:"username"`
+	Picture      *string   `json:"picture"`
 	AccessToken  string    `json:"accessToken"`
 	RefreshToken string    `json:"refreshToken"`
 }
@@ -39,4 +41,12 @@ type LoginBody struct {
 }
 type Refreshes struct {
 	RefreshToken string
+}
+type KafkaSendValues struct {
+	UserId   uuid.UUID `json:"user_id"`
+	Email    string    `json:"email"`
+	Username string    `json:"username"`
+	Picture  *string   `json:"picture"`
+	Role     *string   `json:"user_role"`
+	Revoked  *bool     `json:"revoked"`
 }

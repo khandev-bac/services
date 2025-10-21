@@ -53,6 +53,7 @@ func (as *AuthService) SignUp(ctx context.Context, username, email, password str
 	return &common.UserResponse{
 		ID:           newUser.ID,
 		Email:        newUser.Email,
+		Username:     newUser.Username.String,
 		AccessToken:  tokens.AccessToken,
 		RefreshToken: tokens.RefreshToken,
 	}, nil

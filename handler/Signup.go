@@ -2,15 +2,18 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
+	eventproducer "github.com/services/eventProducer"
 	"github.com/services/internals/service"
 	"github.com/services/utils/common"
 )
 
 type AuthController struct {
-	service *service.AuthService
+	service       *service.AuthService
+	kafkaProducer *eventproducer.KafkaProducer
 }
 
 func WriteJSONError(w http.ResponseWriter, appErr *common.AppError) {
@@ -23,9 +26,10 @@ func WriteJSONResponse(w http.ResponseWriter, users *common.SuccessResponse) {
 	w.WriteHeader(users.Code)
 	json.NewEncoder(w).Encode(users)
 }
-func NewAuthHandler(service *service.AuthService) *AuthController {
+func NewAuthHandler(service *service.AuthService, producer *eventproducer.KafkaProducer) *AuthController {
 	return &AuthController{
-		service: service,
+		service:       service,
+		kafkaProducer: producer,
 	}
 }
 func (ah *AuthController) Test(w http.ResponseWriter, r *http.Request) {
@@ -53,6 +57,19 @@ func (ah *AuthController) SignupHandler(w http.ResponseWriter, r *http.Request) 
 		})
 		return
 	}
+	go func() {
+		err := ah.kafkaProducer.SendEvent(r.Context(), "User_created", common.KafkaSendValues{
+			UserId:   user.ID,
+			Email:    user.Email,
+			Username: user.Username,
+			Picture:  user.Picture,
+		})
+		if err != nil {
+			log.Println("Event sending failed: ", err)
+			return
+		}
+		fmt.Println("Event successfully send")
+	}()
 	WriteJSONResponse(w, &common.SuccessResponse{
 		Message: "Successfully created user",
 		Code:    http.StatusOK,
@@ -61,6 +78,8 @@ func (ah *AuthController) SignupHandler(w http.ResponseWriter, r *http.Request) 
 			Email:        user.Email,
 			AccessToken:  user.AccessToken,
 			RefreshToken: user.RefreshToken,
+			Username:     user.Username,
+			Picture:      user.Picture,
 		},
 	})
 }
