@@ -25,6 +25,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		ctx := context.WithValue(r.Context(), UserIdKey, payload.Id)
+		// fmt.Println("Ctx from middleware: ", ctx)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
