@@ -18,18 +18,19 @@ var (
 	err     error
 )
 
-var DATABASE_URL = os.Getenv("POSTGRES_URL")
-
 func Connect_Database() {
 	logger := config.GetLogger()
+	DATABASE_URL := os.Getenv("POSTGRES_URL")
 	once.Do(func() {
 		pool, err = sql.Open("postgres", DATABASE_URL)
 		if err != nil {
 			logger.Error("Failed to connect to database: ", zap.Error(err))
 		}
-		// if err = pool.Ping(); err != nil {
-		// 	logger.Error("Database failed to response: ", zap.Error(err))
-		// }
+
+		if err = pool.Ping(); err != nil {
+			logger.Error("Database failed to respond: ", zap.Error(err))
+			return
+		}
 		queries = db.New(pool)
 	})
 }
