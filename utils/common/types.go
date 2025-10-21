@@ -7,8 +7,8 @@ type Token struct {
 	RefreshToken string
 }
 type Payloads struct {
-	Id       uuid.UUID
-	Email    string
-	Username string
-	Role     *string
+	Id       uuid.UUID `json:"id"`
+	Email    string    `json:"email"`
+	Username string    `json:"username"`
+	Role     *string   `json:"role"`
 }

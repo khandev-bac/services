@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
@@ -22,6 +20,5 @@ func main() {
 	r := chi.NewRouter()
 	log.Info("Server is connected to port :3000")
 	defer log.Sync()
-	fmt.Println(os.Getenv("POSTGRES_URL"))
 	http.ListenAndServe(constants.PORT, r)
 }
