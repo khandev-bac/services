@@ -23,16 +23,6 @@ services:
     volumes:
       - kafka-data:/tmp/kraft-kafka-logs # Persist Kafka data
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
-    ports:
-      - "8080:8080" # Access the UI on http://localhost:8080
-    environment:
-      # CRITICAL: Connects to the internal Docker service name (your Kafka container name)
-      KAFKA_CLUSTERS_0_NAME: your-local-cluster
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092 
-    depends_on:
-      - kafka     
+
 volumes:
   kafka-data:

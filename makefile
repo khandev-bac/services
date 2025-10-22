@@ -1,6 +1,7 @@
 main_file = cmd/main.go
 binary_name = auth-service
 build_dir = ./bin
+GO_ENV = CGO_ENABLED=1 GOARCH=amd64 GOOS=linux
 install:
 	@echo "Hello world"
 
