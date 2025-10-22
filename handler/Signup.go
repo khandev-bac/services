@@ -58,7 +58,7 @@ func (ah *AuthController) SignupHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	go func() {
-		err := ah.kafkaProducer.SendEvent(r.Context(), "User_created", common.KafkaSendValues{
+		err := ah.kafkaProducer.SendEvent(r.Context(), "user-events", common.KafkaSendValues{
 			UserId:   user.ID,
 			Email:    user.Email,
 			Username: user.Username,

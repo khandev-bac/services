@@ -23,7 +23,7 @@ func main() {
 	logger := config.NewLogger(false)
 	db.Connect_Database()
 	db := db.GetQuery()
-	kafkaProducer, err := eventproducer.NewKafkaProducer("localhost:9092", "user-events")
+	kafkaProducer, err := eventproducer.NewKafkaProducer("localhost:9092", "User_created")
 	if err != nil {
 		log.Println("Kafka-Event error: ", err)
 	}
