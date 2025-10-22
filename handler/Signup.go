@@ -58,17 +58,17 @@ func (ah *AuthController) SignupHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	go func() {
-		err := ah.kafkaProducer.SendEvent(r.Context(), "user-events", common.KafkaSendValues{
+		err := ah.kafkaProducer.SendEvent(r.Context(), "user_created", common.KafkaSendValues{
 			UserId:   user.ID,
 			Email:    user.Email,
 			Username: user.Username,
 			Picture:  user.Picture,
 		})
 		if err != nil {
-			log.Println("Event sending failed: ", err)
+			log.Println("❌ Event sending failed:", err)
 			return
 		}
-		fmt.Println("Event successfully send")
+		fmt.Println("✅ Event successfully sent")
 	}()
 	WriteJSONResponse(w, &common.SuccessResponse{
 		Message: "Successfully created user",

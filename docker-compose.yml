@@ -20,6 +20,9 @@ services:
       KAFKA_LOG_DIRS: /tmp/kraft-kafka-logs
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       CLUSTER_ID: "3BDqA7VPTSWnBiY5JgBMUQ"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
     volumes:
       - kafka-data:/tmp/kraft-kafka-logs # Persist Kafka data
 
