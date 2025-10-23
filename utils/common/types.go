@@ -1,10 +1,23 @@
 package common
 
-import "github.com/google/uuid"
+import (
+	"encoding/json"
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Token struct {
 	AccessToken  string
 	RefreshToken string
+}
+type KafkaEvent struct {
+	EventType string          `json:"event_type"` // Must match producer
+	Timestamp time.Time       `json:"timestamp"`
+	Payload   json.RawMessage `json:"payload"`
+}
+type KafkaDeleteEvent struct {
+	UserId uuid.UUID `json:"user_id"`
 }
 type Payloads struct {
 	Id       uuid.UUID `json:"id"`

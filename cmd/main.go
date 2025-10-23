@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -17,6 +18,8 @@ import (
 )
 
 func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -29,6 +32,13 @@ func main() {
 		log.Println("Kafka-Event error: ", err)
 	}
 	defer kafkaProducer.Close()
+	kafkaconsumer, err := eventproducer.NewKafkaConsumer(
+		"localhost:9092",
+		"auth-service",
+		"User_deleted",
+		db,
+	)
+	go kafkaconsumer.Start(ctx)
 	common.InitKey()
 	common.InitPublicKey()
 	repo := repository.NewRepository(db)
