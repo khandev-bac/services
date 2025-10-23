@@ -26,7 +26,7 @@ func (ah *AuthController) Refreshes(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	newTokens := common.GenerateToken(common.Payloads{
+	newTokens, _ := common.GenerateToken(common.Payloads{
 		Id:       payload.Id,
 		Email:    payload.Email,
 		Username: payload.Username,

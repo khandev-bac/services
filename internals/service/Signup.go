@@ -44,12 +44,14 @@ func (as *AuthService) SignUp(ctx context.Context, username, email, password str
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
-	tokens := common.GenerateToken(common.Payloads{
+	tokens, err := common.GenerateToken(common.Payloads{
 		Id:       newUser.ID,
 		Email:    newUser.Email,
 		Username: newUser.Username.String,
 	})
-
+	if tokens == nil {
+		return nil, fmt.Errorf("failed to generate JWT tokens: ", err)
+	}
 	return &common.UserResponse{
 		ID:           newUser.ID,
 		Email:        newUser.Email,

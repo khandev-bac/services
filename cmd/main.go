@@ -11,6 +11,7 @@ import (
 	"github.com/services/internals/repository"
 	"github.com/services/internals/routes"
 	"github.com/services/internals/service"
+	"github.com/services/utils/common"
 	"github.com/services/utils/config"
 	"github.com/services/utils/constants"
 )
@@ -28,6 +29,8 @@ func main() {
 		log.Println("Kafka-Event error: ", err)
 	}
 	defer kafkaProducer.Close()
+	common.InitKey()
+	common.InitPublicKey()
 	repo := repository.NewRepository(db)
 	service := service.NewAuthService(repo)
 	handler := handler.NewAuthHandler(service, kafkaProducer)

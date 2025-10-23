@@ -19,7 +19,7 @@ func (as *AuthService) Login(ctx context.Context, email, password string) (*comm
 	if err := common.CheckPasswordHash(password, userFound.Password); err != nil {
 		return nil, errors.New("invalid password or email")
 	}
-	tokens := common.GenerateToken(common.Payloads{
+	tokens, _ := common.GenerateToken(common.Payloads{
 		Id:       userFound.ID,
 		Email:    userFound.Email,
 		Username: userFound.Username.String,

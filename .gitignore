@@ -3,3 +3,5 @@
 .env.*
 /bin
 Dockerfile
+private.pem
+public.pem
